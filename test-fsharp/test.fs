@@ -38,8 +38,8 @@ let v = [
   8 0 4 7 0 0 9 3 5 
   0 2 7 0 0 5 0 1 8 *)
 //Console.Write("OUTPUT: " + sudoku.squares.ToString())
-let filterd =
-  List.filter (fun (va) -> List.nth va 2 = 0) v
+let missingVals =
+  List.filter (fun (va) -> List.nth va 2 <> 0) v
 let extract x y =
   List.filter (fun (cell) ->
                let cellX = List.nth cell 0
@@ -53,23 +53,33 @@ let makeQuad =
 let makeRow rowNum =
   [for y in 0..8 do
    yield [rowNum;y;]]
+let makeCol colNum =
+  [for x in 0..8 do
+   yield [x;colNum;]]
 
 let filterNum num theList = List.filter (fun x -> x <> num) theList
 
 let extractCellValues cells =
-  List.map (fun (cell) ->
+  (List.filter (fun x -> x <> 0) (List.map (fun (cell) ->
             match cell with
             | [x;y] -> List.nth (extract x y |> List.head) 2
             | _ -> 0)
-            cells
+            cells))
 
 let inList num list = List.exists (fun x -> x = num) list
 let findRow = extractCellValues (makeRow 0)  
 let findQuad = extractCellValues makeQuad 
+let findCol = extractCellValues (makeCol 0)
 
 let missingFrom list =
   List.filter (fun x -> (not (inList x list))) [1..9]
 
-printfn "%A" findQuad
-printfn "%A" findRow
+  
+
+printfn "Row: %A" findRow
 printfn "Missing from row: %A" (missingFrom findRow)
+printfn "Col: %A" findCol
+printfn "Missing from col: %A" (missingFrom findCol)
+printfn "Quad: %A" findQuad
+printfn "Missing from quad: %A" (missingFrom findQuad)
+printfn "Missing: %A" (missingVals)
