@@ -27,7 +27,8 @@ let v = [
   [7; 0; 8];[7; 1; 0];[7; 2; 4];[7; 3; 7];[7; 4; 0];[7; 5; 0];[7; 6; 9];[7; 7; 3];[7; 8; 5];
   [8; 0; 0];[8; 1; 2];[8; 2; 7];[8; 3; 0];[8; 4; 0];[8; 5; 5];[8; 6; 0];[8; 7; 1];[8; 8; 8];]
 
- (* 1 7 0 5 0 0 6 8 0 
+ (*
+  1 7 0 5 0 0 6 8 0 
   3 5 2 0 0 8 1 0 7 
   0 4 0 1 0 7 0 0 9 
   0 0 0 4 0 0 2 9 0 
@@ -61,11 +62,14 @@ let extractCellValues cells =
             | [x;y] -> List.nth (extract x y |> List.head) 2
             | _ -> 0)
             cells
-            
-let findRow = extractCellValues (makeRow 0)  
-let findQuad = extractCellValues makeQuad  
 
-//for x::y::rest in [[1;2;];[3;4]] do
-//  Console.Write("x: " + x.ToString() + " y: " + y.ToString())
+let inList num list = List.exists (fun x -> x = num) list
+let findRow = extractCellValues (makeRow 0)  
+let findQuad = extractCellValues makeQuad 
+
+let missingFrom list =
+  List.filter (fun x -> (not (inList x list))) [1..9]
+
 printfn "%A" findQuad
 printfn "%A" findRow
+printfn "Missing from row: %A" (missingFrom findRow)
