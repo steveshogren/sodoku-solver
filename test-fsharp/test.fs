@@ -69,13 +69,46 @@ let extractCellValues cells =
 let inList num list = List.exists (fun x -> x = num) list
 let findRow = extractCellValues (makeRow 0)  
 let findQuad = extractCellValues makeQuad 
-let findCol = extractCellValues (makeCol 0)
+let findCol = extractCellValues (makeCol 2)
+let firstRow x = x < 3
+let secondRow x = x > 2 && x < 6
+let thirdRow x = x > 5 
+let firstCol y = firstRow y
+let secondCol y = secondRow y
+let thirdCol y = thirdRow y
+let mapToQuad cell =
+  match cell with
+    | [x;y;value] when firstRow x && firstCol y  -> 1
+    | [x;y;value] when firstRow x && secondCol y -> 2
+    | [x;y;value] when firstRow x && thirdCol y  -> 3
+    | [x;y;value] when secondRow x && firstCol y -> 4
+    | [x;y;value] when secondRow x && secondCol y-> 5
+    | [x;y;value] when secondRow x && thirdCol y -> 6
+    | [x;y;value] when thirdRow x && firstCol y  -> 7
+    | [x;y;value] when thirdRow x && secondCol y -> 8
+    | [x;y;value] when thirdRow x && thirdCol y  -> 9
+    
 
 let missingFrom list =
   List.filter (fun x -> (not (inList x list))) [1..9]
 
+let canSetVal =
+  let colVals = (missingFrom findCol)
+  let quadVals = (missingFrom findQuad)
+  let rowVals = (missingFrom findRow)
+  let possibleCols =
+    List.filter (fun x -> ( (inList x rowVals) && (inList x quadVals)))
+     colVals
+  let possibleRows =
+    List.filter (fun x -> ( (inList x colVals) &&  (inList x quadVals)))
+     rowVals
+  let possibleQuads =
+    List.filter (fun x -> ((inList x colVals) &&  (inList x rowVals)))
+     quadVals
+  if (List.length possibleCols = 1) && (List.length possibleCols = 1) && (List.length possibleCols = 1) then
+    List.head possibleCols
+  else 0
   
-
 printfn "Row: %A" findRow
 printfn "Missing from row: %A" (missingFrom findRow)
 printfn "Col: %A" findCol
@@ -83,3 +116,6 @@ printfn "Missing from col: %A" (missingFrom findCol)
 printfn "Quad: %A" findQuad
 printfn "Missing from quad: %A" (missingFrom findQuad)
 printfn "Missing: %A" (missingVals)
+printfn "Can set: %A" (canSetVal)
+
+
