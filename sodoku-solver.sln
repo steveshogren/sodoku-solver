@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "test-fsharp", "test-fsharp\test-fsharp.fsproj", "{E33A52EA-0DF1-4220-908D-6C704A25A68C}"
+Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "sodoku-solver", "sodoku-solver\sodoku-solver.fsproj", "{E33A52EA-0DF1-4220-908D-6C704A25A68C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +15,6 @@ Global
 		{E33A52EA-0DF1-4220-908D-6C704A25A68C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = test-fsharp\test-fsharp.fsproj
+		StartupItem = sodoku-solver\sodoku-solver.fsproj
 	EndGlobalSection
 EndGlobal
