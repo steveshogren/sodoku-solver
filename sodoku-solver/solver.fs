@@ -38,13 +38,14 @@ let v = [
   8 0 4 7 0 0 9 3 5 
   0 2 7 0 0 5 0 1 8 *)
 //Console.Write("OUTPUT: " + sudoku.squares.ToString())
-let missingVals =
-  List.filter (fun (va) -> List.nth va 2 = 0) v
-let extract x y =
+let missingVals board =
+  List.filter (fun (va) -> List.nth va 2 = 0) board
+
+let extract x y board =
   List.filter (fun (cell) ->
                let cellX = List.nth cell 0
                let cellY = List.nth cell 1
-               cellX = x && cellY = y) v
+               cellX = x && cellY = y) board 
 
 let nestedLoop xFrom xTo yFrom yTo =
   [for x in xFrom..xTo do for y in yFrom..yTo do yield [x;y;]]
@@ -71,13 +72,9 @@ let makeCol colNum =
 
 let filterNum num theList = List.filter (fun x -> x <> num) theList
 
-let extractCellValues cells =
-  (List.filter (fun x -> x <> 0) (List.map (fun (cell) ->
-            match cell with
-            | [x;y] -> List.nth (extract x y |> List.head) 2
-            | _ -> 0)
-            cells))
-
+let extractCellValues cells board =
+  List.filter (fun x -> x <> 0) (List.map (fun (cell) -> match cell with | [x;y] -> List.nth ((extract x y board) |> List.head) 2 | _ -> 0) cells)
+ 
 let inList num list = List.exists (fun x -> x = num) list
 let firstRow x = x < 3
 let secondRow x = x > 2 && x < 6
@@ -97,17 +94,17 @@ let mapToQuad cell =
     | [x;y;value] when thirdRow x && secondCol y -> 8
     | [x;y;value] when thirdRow x && thirdCol y  -> 9
     
-let findRow cell = extractCellValues (makeRow (List.head cell))  
-let findQuad cell = extractCellValues (cell |> mapToQuad |> makeQuad) 
-let findCol cell = extractCellValues (makeCol (cell |> List.tail |> List.head))
+let findRow cell board = extractCellValues (makeRow (List.head cell)) board
+let findQuad cell board = extractCellValues (cell |> mapToQuad |> makeQuad) board
+let findCol cell board = extractCellValues (makeCol (cell |> List.tail |> List.head)) board
 
 let missingFrom list =
   List.filter (fun x -> (not (inList x list))) [1..9]
 
-let canSetVal cell =
-  let colVals = (missingFrom (findCol cell))
-  let quadVals = (missingFrom (findQuad cell))
-  let rowVals = (missingFrom (findRow cell))
+let certainNewValue cell board =
+  let colVals = (missingFrom (findCol cell board))
+  let quadVals = (missingFrom (findQuad cell board))
+  let rowVals = (missingFrom (findRow cell board))
   let possibleCols =
     List.filter (fun x -> ((inList x rowVals) && (inList x quadVals)))
      colVals
@@ -121,10 +118,31 @@ let canSetVal cell =
     List.head possibleCols
   else 0 // couldn't find a conclusive number
 
+let matches cell1 cell2 =
+  let [x1;y1;val1] = cell1 
+  let [x2;y2;val2] = cell2 
+  x1 = x2 && y1 = y2
 
-//printfn "Missing: %A" (missingVals)
-let printCellAnswer cell =
-  printfn "Can set cell:%A to: %A" cell (canSetVal cell)
-List.map printCellAnswer missingVals
+let updateBoard board cell =
+  List.map (fun oldCell -> if matches oldCell cell then cell else oldCell) board
+  
+//let printCellAnswer cell = printfn "Can set cell:%A to: %A" cell (certainNewValue cell)
+//List.map printCellAnswer missingVals
+let findAnswers board =
+  let rec inner iboard =
+    let emptyCells = missingVals iboard
+    let optionallyReplaceCell cell =
+      let [x;y;value] = cell
+      if value = 0 then [x;y; (certainNewValue cell iboard)] else cell
+    if List.length emptyCells = 0 then
+      iboard
+    else
+      inner (List.map optionallyReplaceCell iboard)
+  inner board 
+
+printfn "Finding..."
+printfn "%A" (findAnswers v)
+
+
 
 
