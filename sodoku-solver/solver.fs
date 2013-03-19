@@ -12,19 +12,6 @@ module solve =
     let nestedLoop xFrom xTo yFrom yTo =
       [for x in xFrom..xTo do for y in yFrom..yTo do yield [x;y;]]
 
-    let makeQuad section =
-      match section with
-        | 1 -> nestedLoop 0 2 0 2
-        | 2 -> nestedLoop 0 2 3 5
-        | 3 -> nestedLoop 0 2 6 8 
-        | 4 -> nestedLoop 3 5 0 2
-        | 5 -> nestedLoop 3 5 3 5
-        | 6 -> nestedLoop 3 5 6 8 
-        | 7 -> nestedLoop 6 8 0 2
-        | 8 -> nestedLoop 6 8 3 5
-        | 9 -> nestedLoop 6 8 6 8
-        | _ -> [] 
-
     let makeRow rowNum =
       [for y in 0..8 do
        yield [rowNum;y;]]
@@ -44,20 +31,20 @@ module solve =
     let firstCol y = firstRow y
     let secondCol y = secondRow y
     let thirdCol y = thirdRow y
-    let mapToQuad cell =
+    let makeQuad cell =
       match cell with
-        | [x;y;value] when firstRow x && firstCol y  -> 1
-        | [x;y;value] when firstRow x && secondCol y -> 2
-        | [x;y;value] when firstRow x && thirdCol y  -> 3
-        | [x;y;value] when secondRow x && firstCol y -> 4
-        | [x;y;value] when secondRow x && secondCol y-> 5
-        | [x;y;value] when secondRow x && thirdCol y -> 6
-        | [x;y;value] when thirdRow x && firstCol y  -> 7
-        | [x;y;value] when thirdRow x && secondCol y -> 8
-        | [x;y;value] when thirdRow x && thirdCol y  -> 9
+        | [x;y;value] when firstRow x && firstCol y  -> nestedLoop 0 2 0 2
+        | [x;y;value] when firstRow x && secondCol y -> nestedLoop 0 2 3 5
+        | [x;y;value] when firstRow x && thirdCol y  -> nestedLoop 0 2 6 8
+        | [x;y;value] when secondRow x && firstCol y -> nestedLoop 3 5 0 2
+        | [x;y;value] when secondRow x && secondCol y-> nestedLoop 3 5 3 5
+        | [x;y;value] when secondRow x && thirdCol y -> nestedLoop 3 5 6 8
+        | [x;y;value] when thirdRow x && firstCol y  -> nestedLoop 6 8 0 2
+        | [x;y;value] when thirdRow x && secondCol y -> nestedLoop 6 8 3 5
+        | [x;y;value] when thirdRow x && thirdCol y  -> nestedLoop 6 8 6 8
 
     let findRow cell board = extractCellValues (makeRow (List.head cell)) board
-    let findQuad cell board = extractCellValues (cell |> mapToQuad |> makeQuad) board
+    let findQuad cell board = extractCellValues (cell |> makeQuad) board
     let findCol cell board = extractCellValues (makeCol (cell |> List.tail |> List.head)) board
 
     let missingFrom list =
