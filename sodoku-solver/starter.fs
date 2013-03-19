@@ -24,8 +24,7 @@ let v = [
 
 open System
 printfn "Solving..."
-open sodokusolver
-printfn "%A" (solve.findAnswers v)
+//printfn "%A" (solve.findAnswers v)
 
 let input = "17.5..68.352..81.7.4.1.7..9...4..29...6.5.8...91..6...5..9.4.6.8.47..935.27..5.18"
 let expected = [
@@ -40,7 +39,10 @@ let expected = [
   [8; 0; 0];[8; 1; 2];[8; 2; 7];[8; 3; 0];[8; 4; 0];[8; 5; 5];[8; 6; 0];[8; 7; 1];[8; 8; 8];]
 
 printfn "Parsing..."
-printfn "%A" (parser.parse (input.Split("d")))
+open sodokusolver
+let result = (solve.findAnswers (List.ofSeq (parser.parse input)))
+printfn "%A" result
+
 
 
 
