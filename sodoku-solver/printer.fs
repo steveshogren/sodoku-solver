@@ -1,5 +1,7 @@
 namespace sodokusolver
 module printer =
   let print board =
-    for x in 0..8 do 
-      printfn "%A\n"  (Seq.take 9 board)
+    for cell in board do
+      match cell with
+        | [x;y;value] -> if y = 8 then printfn "%A" value else printf "%A_" value
+        | _ -> printf "Nadda"
