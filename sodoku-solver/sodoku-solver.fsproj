@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="solver.fs" />
     <Compile Include="parser.fs" />
+    <Compile Include="printer.fs" />
     <Compile Include="starter.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />

@@ -1,4 +1,3 @@
-// .94...13..............76..2.8..1.....32.........2...6.....5.4.......8..7..63.4..8
 namespace sodokusolver
 module parser =
   open System
