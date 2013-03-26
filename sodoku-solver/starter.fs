@@ -21,6 +21,5 @@ let result = (solve.findAnswers (List.ofSeq (parser.parse input)))
 //printfn "%A" result
 printer.print result 
 
-
-
-
+//monad.addThreeNumbersImperitive()
+monad.addThreeNumbersBind()
