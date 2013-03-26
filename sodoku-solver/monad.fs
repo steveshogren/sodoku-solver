@@ -25,3 +25,18 @@ module monad =
            bind(createMsg "#2: ", fun y ->
                 bind(createMsg "#3: ", fun z -> Some(x + y + z) ) ) )
 
+    type MaybeBuilder() =
+      member this.Bind(x, f) =
+        match x with
+          | Some(x) when x >= 0 && x <= 100 -> f(x)
+          | _ -> None
+      member this.Delay(f) = f()
+      member this.Return(x) = Some x
+
+    let addThreeNumbersMaybeBuilder() =
+      let maybe = MaybeBuilder ()
+      maybe.Delay (fun () ->
+        let x = 10
+        maybe.Bind (Some 11, fun y ->
+            maybe.Bind (Some 12, fun z ->
+                maybe.Return (x + y + z))))

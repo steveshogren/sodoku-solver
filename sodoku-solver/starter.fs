@@ -22,4 +22,5 @@ let result = (solve.findAnswers (List.ofSeq (parser.parse input)))
 printer.print result 
 
 //monad.addThreeNumbersImperitive()
-monad.addThreeNumbersBind()
+//monad.addThreeNumbersBind()
+printfn "%A" monad.addThreeNumbersMaybeBuilder
