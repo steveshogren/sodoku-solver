@@ -23,4 +23,5 @@ printer.print result
 
 //monad.addThreeNumbersImperitive()
 //monad.addThreeNumbersBind()
-printfn "%A" monad.addThreeNumbersMaybeBuilder
+//printfn "%A" monad.addThreeNumbersMaybeBuilder
+printfn "%A" monad.addThreeNumbersMaybeBuilderSugared

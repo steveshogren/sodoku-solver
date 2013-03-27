@@ -40,3 +40,11 @@ module monad =
         maybe.Bind (Some 11, fun y ->
             maybe.Bind (Some 12, fun z ->
                 maybe.Return (x + y + z))))
+    let addThreeNumbersMaybeBuilderSugared() =
+      let maybe = MaybeBuilder ()
+      maybe {
+          let x = 5
+          let! y = Some 5
+          let! z = Some 5
+          return x + y + z
+        }
